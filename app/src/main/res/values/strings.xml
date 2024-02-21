@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Unicast Server</string>
+    <string name="sendButton">Send</string>
+    <string name="address">IP-address</string>
+    <string name="results">results</string>
+    <string name="receive">Receive</string>
+</resources>
