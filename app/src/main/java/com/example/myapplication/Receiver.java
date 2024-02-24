@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.os.Build;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -14,7 +15,10 @@ public class Receiver implements Runnable {
     //public StringBuilder sb;
     //public TextView results;
 
-    public Receiver(int port) {
+    private final MainActivity mainActivity;
+
+    public Receiver(int port, MainActivity activity) {
+        mainActivity = activity;
         this.port = port;
         //sb = null;
         count = 0;
@@ -32,6 +36,9 @@ public class Receiver implements Runnable {
             while (true) {
                 socket.receive(packet);
                 count++;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    mainActivity.setResults(count);
+                }
                 //sb.append("Hello");
                 //sb.append(Arrays.toString(packet.getData()));
                 //sb.append("\n");
