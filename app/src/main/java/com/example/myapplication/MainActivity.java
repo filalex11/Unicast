@@ -1,26 +1,16 @@
 package com.example.myapplication;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.annotation.SuppressLint;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.text.format.Formatter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.util.Arrays;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends AppCompatActivity {
@@ -33,11 +23,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        WifiManager WifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        String IPAddress = Formatter.formatIpAddress(WifiManager.getConnectionInfo().getIpAddress());
+
         address = findViewById(R.id.address);
         sendButton = findViewById(R.id.sendButton);
         results = findViewById(R.id.results);
+        results.setText("IP-адрес вашего устройства:" + IPAddress);
+
         receiveButton = findViewById(R.id.receiveButton);
-        Receiver receiver = new Receiver(port);
+        Receiver receiver = new Receiver(port, this);
         Thread receiving = new Thread(receiver);
         receiving.start();
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -70,5 +66,10 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
         //receive();
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void setResults(int count) {
+        results.setText(Integer.toString(count));
     }
 }
